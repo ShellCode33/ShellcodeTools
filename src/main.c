@@ -2,6 +2,7 @@
 
 int main(int argc, char **argv)
 {
+	printf("This is a test.\n");
 	init();
 
 	int userInput;
