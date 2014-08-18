@@ -2,7 +2,7 @@
 
 int getUserSelection()
 {
-	char *buf = (char*) calloc(3, sizeof(char)); //3 bytes, the first is the choise, the second, is to detect if user enter a number which is bigger than 9, (with 2 digits, like 10, 11, 12...) and the last one, is for the null byte.
+	char *buf = (char*) calloc(3, sizeof(char)); //3 bytes, the first is the choice, the second, is to detect if user enter a number which is bigger than 9, (with 2 digits, like 10, 11, 12...) and the last one, is for the null byte.
 	fgets(buf, 3, stdin);
 
 	if(*buf != '\n' && *(buf+1) != '\n') //Need to test the first byte too, to see if the user don't do just "enter"

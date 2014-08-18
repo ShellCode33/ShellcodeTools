@@ -48,4 +48,9 @@ void printHelp()
 	{
 		printf("Help du Shellcode Creator Linux x86 menu\n");
 	}
+
+	else
+	{
+		printf("Help not found.\n");
+	}
 }
