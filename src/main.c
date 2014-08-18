@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 
 void init()
 {
+	//cleanFiles(); //TODO : remove all asm files
 	signal(SIGINT, catchCtrl);
 	itemCount = 0;
 	mainMenu();

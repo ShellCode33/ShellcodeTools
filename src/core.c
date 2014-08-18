@@ -72,22 +72,68 @@ void shellcodeCreator_windows64()
 	printf("Not yet implemented.\n");
 }
 
+void createAssembly()
+{
+	FILE *file = fopen("prog.asm", "r");
+	
+	if(!file)
+	{
+		file = fopen("prog.asm", "w");
+
+		//Generate Assembly file
+		fputs("section .text\n", file);
+		fputs("global _start\n\n", file);
+		fputs("_start:\n", file);
+
+		fclose(file);
+		file = NULL;
+	}
+
+	else
+	{
+		fclose(file);
+		printf("File already exists\n");
+	}
+}
+
 void generateAssemblyWrite()
 {
+	createAssembly();
+
+	//TODO : ask to the user what he wish to write and where (file, stdin, stdout etc...)
+
+	FILE *file = fopen("prog.asm", "a+");
+	
+	if(file)
+	{
+		fputs("\n\t; write\n", file);
+		fputs("\tmov eax, 4\n", file);
+		fputs("\tmov ebx, 1\n", file);
+		fputs("\tmov ecx, offset string\n", file);
+		fputs("\tmov edx, stringSize\n", file);
+		fputs("\tint 0x80\n", file);
+	}
+
+	else
+		printf("Erreur ?\n");
+
 	printf("ASM : write\n");
 }
 
 void generateAssemblyRead()
 {
+	createAssembly();
 	printf("ASM : read\n");
 }
 
 void generateAssemblyExec()
 {
+	createAssembly();
 	printf("ASM : exec\n");
 }
 
 void generateAssemblyExit()
 {
+	createAssembly();
 	printf("ASM : exit\n");
 }

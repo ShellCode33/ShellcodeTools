@@ -20,6 +20,8 @@ void shellcodeCreator_linux64();
 void shellcodeCreator_windows86();
 void shellcodeCreator_windows64();
 
+void createAssembly();
+
 //instructions
 void generateAssemblyWrite();
 void generateAssemblyRead();
