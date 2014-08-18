@@ -1,13 +1,16 @@
 #include "menu.h"
 
-void setMainMenu()
+void mainMenu()
 {
-	freeMenu(); //free just just to "Back" from core.c, useless for main.c
+	lastMenu = NULL;
+	currentMenu = mainMenu;
+
+	freeMenu(); //free just to "Back" from core.c, useless for main.c
 
 	addItemMenu("Shellcode Generator", shellcodeGenerator);
 	addItemMenu("Shellcode Creator", shellcodeCreator);
 	addItemMenu("Shellcode Analyzer", shellcodeAnalyzer);
-	addItemMenu("Help", help);
+	addItemMenu("Help", printHelp);
 	addItemMenu("About", about);
 	addItemMenu("Exit", exitProgram);
 
@@ -53,15 +56,28 @@ void printMenu()
 
 	#endif
 
-	printf(	">>>  SHELLCODE TOOLS  <<<  \n"
-			"\t\tBy M3nth0le\n\n"
-			"----------  Menu  ----------\n");
+	printf(
+
+"  ________.__           .__  .__                   .___      \n"
+" /   _____|  |__   ____ |  | |  |   ____  ____   __| _/____  \n"
+" \\_____  \\|  |  \\_/ __ \\|  | |  | _/ ___\\/  _ \\ / __ _/ __ \\ \n"
+" /        |   Y  \\  ___/|  |_|  |_\\  \\__(  <_> / /_/ \\  ___/ \n"
+"/_______  |___|  /\\___  |____|____/\\___  \\____/\\____ |\\___  >\n"
+"        \\/     \\/     \\/___________    \\/     .__   \\/    \\/ \n"
+"                        \\__    _______   ____ |  |   ______  \n"
+"                          |    | /  _ \\ /  _ \\|  |  /  ___/  \n"
+"                          |    |(  <_> (  <_> |  |__\\___ \\   \n"
+"                          |____| \\____/ \\____/|____/____  >  \n"
+"                                                        \\/   \n\n"
+"----------  Menu  ----------\n"
+
+	);
 
 	int i;
 	int newLine = 0;
 	for(i = 0; i < itemCount; i++)
 	{
-		if(!newLine && (strcmp(menu[i]->itemName, "Exit") == 0 ||  strcmp(menu[i]->itemName, "Back") == 0 || strcmp(menu[i]->itemName, "Help") == 0))
+		if(!newLine && (strcmp(menu[i]->itemName, "Back") == 0 || strcmp(menu[i]->itemName, "Help") == 0))
 		{
 			printf("\n");
 			newLine = 1;
@@ -88,4 +104,14 @@ void freeMenu()
 	}
 
 	itemCount = 0;
+}
+
+void* getLastMenu()
+{
+	return lastMenu;
+}
+
+void* getCurrentMenu()
+{
+	return currentMenu;
 }

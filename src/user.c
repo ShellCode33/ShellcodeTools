@@ -29,3 +29,23 @@ void flushStdin()
 		c = getchar();		
 	} while(c != EOF && c != '\n');
 }
+
+void printHelp()
+{
+	void *func = getCurrentMenu();
+	
+	if(func == mainMenu)
+	{
+		printf("Help du main menu\n");
+	}
+
+	else if(func == shellcodeCreator)
+	{
+		printf("Help du Shellcode Creator menu\n");
+	}
+
+	else if(func == shellcodeCreator_linux86)
+	{
+		printf("Help du Shellcode Creator Linux x86 menu\n");
+	}
+}

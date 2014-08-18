@@ -5,8 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "core.h"
+#include "menu.h"
+
 
 int getUserSelection();
 void flushStdin();
+void printHelp();
 
 #endif

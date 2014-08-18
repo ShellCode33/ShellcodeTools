@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "core.h"
+#include "user.h"
 
 typedef struct ItemMenu
 {
@@ -15,12 +16,17 @@ typedef struct ItemMenu
 	void (*func)();
 } ItemMenu;
 
+void *lastMenu;
+void *currentMenu;
 ItemMenu *menu[MAX_ITEM_MENU];
 int itemCount;
 
-void setMainMenu();
+void mainMenu();
 void addItemMenu(char*, void*);
 void printMenu();
 void freeMenu();
+
+void* getLastMenu();
+void* getCurrentMenu();
 
 #endif

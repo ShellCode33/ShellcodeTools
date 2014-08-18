@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "menu.h"
+#include "user.h"
 
 //menu functions
 void shellcodeGenerator();
@@ -18,4 +19,10 @@ void shellcodeCreator_linux86();
 void shellcodeCreator_linux64();
 void shellcodeCreator_windows86();
 void shellcodeCreator_windows64();
+
+//instructions
+void generateAssemblyWrite();
+void generateAssemblyRead();
+void generateAssemblyExec();
+void generateAssemblyExit();
 #endif

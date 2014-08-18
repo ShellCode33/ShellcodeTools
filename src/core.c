@@ -7,12 +7,16 @@ void shellcodeGenerator()
 
 void shellcodeCreator()
 {
+	lastMenu = mainMenu;
+	currentMenu = shellcodeCreator;
+
 	freeMenu();
 	addItemMenu("Linux x86", shellcodeCreator_linux86);
 	addItemMenu("Linux x86_x64", shellcodeCreator_linux64);
 	addItemMenu("Windows x86", shellcodeCreator_windows86);
 	addItemMenu("Windows x64", shellcodeCreator_windows64);
-	addItemMenu("Back", setMainMenu);
+	addItemMenu("Help", printHelp);
+	addItemMenu("Back", lastMenu);
 	printMenu();
 }
 
@@ -21,17 +25,13 @@ void shellcodeAnalyzer()
 	printf("Not yet implemented.\n");
 }
 
-void help()
-{
-	printf("Not yet implemented.\n");
-}
-
 void about()
 {
 	printf(	"This tool was developped by M3nth0le.\n"
-			"The project begin the Friday, 15 August.\n"
-			"However the first release time is : xxx\n"
-			"Version: 0.1\n");
+			"The project began the Friday, 15 August.\n"
+			"GitHub : https://github.com/M3nth0le/ShellcodeTools/\n"
+			"Ascii Art : http://patorjk.com/software/taag/\n"
+			"\nVersion: 0.1\n");
 }
 
 void exitProgram()
@@ -43,13 +43,17 @@ void exitProgram()
 
 void shellcodeCreator_linux86()
 {
+	lastMenu = shellcodeCreator;
+	currentMenu = shellcodeCreator_linux86;
+
 	freeMenu();
-	addItemMenu("Write", generateAssembly);
-	addItemMenu("Read", generateAssembly);
-	addItemMenu("Exec", generateAssembly);
-	addItemMenu("Exit", generateAssembly);
-	addItemMenu("Help", generateAssembly);
-	addItemMenu("Back", setMainMenu);
+	addItemMenu("Write", generateAssemblyWrite);
+	addItemMenu("Read", generateAssemblyRead);
+	addItemMenu("Exec", generateAssemblyExec);
+	addItemMenu("Exit", generateAssemblyExit);
+
+	addItemMenu("Help", printHelp);
+	addItemMenu("Back", lastMenu);
 	printMenu();
 }
 
@@ -66,4 +70,24 @@ void shellcodeCreator_windows86()
 void shellcodeCreator_windows64()
 {
 	printf("Not yet implemented.\n");
+}
+
+void generateAssemblyWrite()
+{
+	printf("ASM : write\n");
+}
+
+void generateAssemblyRead()
+{
+	printf("ASM : read\n");
+}
+
+void generateAssemblyExec()
+{
+	printf("ASM : exec\n");
+}
+
+void generateAssemblyExit()
+{
+	printf("ASM : exit\n");
 }

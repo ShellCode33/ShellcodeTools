@@ -25,6 +25,12 @@ int main(int argc, char **argv)
 
 void init()
 {
+	signal(SIGINT, catchCtrl);
 	itemCount = 0;
-	setMainMenu();
+	mainMenu();
+}
+
+void catchCtrl(int dummy)
+{
+	write(STDOUT_FILENO, "\nchoice> ", 9); //KeyBoardInterrupt
 }
