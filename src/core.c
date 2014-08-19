@@ -47,12 +47,14 @@ void shellcodeCreator_linux86()
 	currentMenu = shellcodeCreator_linux86;
 
 	freeMenu();
-	addItemMenu("Write", generateAssemblyWrite);
-	addItemMenu("Read", generateAssemblyRead);
-	addItemMenu("Exec", generateAssemblyExec);
-	addItemMenu("Exit", generateAssemblyExit);
+	addItemMenu("Write", processInstruction);
+	addItemMenu("Read", processInstruction);
+	addItemMenu("Exec", processInstruction);
+	addItemMenu("Exit", processInstruction);
 
 	addItemMenu("Help", printHelp);
+	addItemMenu("Look Assembly", printFileContent);
+	addItemMenu("Create Shellcode", createShellcode);
 	addItemMenu("Back", lastMenu);
 	printMenu();
 }
@@ -72,13 +74,17 @@ void shellcodeCreator_windows64()
 	printf("Not yet implemented.\n");
 }
 
+/*
 void createAssembly()
 {
-	FILE *file = fopen("prog.asm", "r");
+	if(startAssembly == NULL)
+		startAssembly = (char*) calloc(30, sizeof(char));
+
+	FILE *file = fopen(FILENAME, "r");
 	
 	if(!file)
 	{
-		file = fopen("prog.asm", "w");
+		file = fopen(FILENAME, "w");
 
 		//Generate Assembly file
 		fputs("section .text\n", file);
@@ -95,14 +101,73 @@ void createAssembly()
 		printf("File already exists\n");
 	}
 }
+*/
 
+void printFileContent()
+{
+	FILE *file = fopen(FILENAME, "r");
+	
+	if(file)
+	{
+		printf("------ Assembly ------\n");
+
+		char *line = (char*) calloc(600, sizeof(char));
+
+		while(fgets(line, 600, file) != NULL)
+			printf("%s", line);
+
+		free(line);
+		line = NULL;
+
+		printf("----------------------\n");
+
+		fclose(file);
+		file = NULL;
+	}
+
+	else
+		printf("Please choose an instruction before.\n");
+}
+
+void createShellcode()
+{
+	printf("Creating...\n");
+}
+
+/*
 void generateAssemblyWrite()
 {
 	createAssembly();
+	canCatch = 0;
 
-	//TODO : ask to the user what he wish to write and where (file, stdin, stdout etc...)
+	char *text = (char*) calloc(500, sizeof(char));
+	char *dest;
 
-	FILE *file = fopen("prog.asm", "a+");
+	while(1)
+	{
+		printf("[text] : ");
+
+		fgets(text, 500, stdin);
+
+		printf("text: %s\n", text);
+
+		if(*text != '\n')
+			break;
+	}
+
+	while(1)
+	{
+		printf("[destination] (ex: stdin, stdout, stderr, or a filename) : ");
+
+		fgets(text, 500, stdin);
+
+		printf("text: %s\n", text);
+
+		if(*text != '\n')
+			break;
+	}
+
+	FILE *file = fopen(FILENAME, "a");
 	
 	if(file)
 	{
@@ -112,28 +177,131 @@ void generateAssemblyWrite()
 		fputs("\tmov ecx, offset string\n", file);
 		fputs("\tmov edx, stringSize\n", file);
 		fputs("\tint 0x80\n", file);
+		
+		fclose(file);
+		file = NULL;
 	}
 
 	else
 		printf("Erreur ?\n");
 
 	printf("ASM : write\n");
+	canCatch = 1;
+}
+*/
+
+void processInstruction()
+{
+	canCatch = 0;
+
+	Options *options = (Options*) malloc(sizeof(Options));
+
+	char *fileName;
+	char *text;
+	char *varName;
+
+	switch(userInput)
+	{
+		case 1:		//write
+			text = (char*) calloc(500, sizeof(char));
+			fileName = (char*) calloc(500, sizeof(char));
+
+			do
+			{
+				printf("[text] : ");
+				fgets(text, 500, stdin);
+			} while(*text == '\n');
+
+			do
+			{
+				printf("[destination] (ex: stdin, stdout, stderr, file, or varName) : ");
+				fgets(fileName, 500, stdin);
+			} while(*fileName == '\n');
+
+			options->arg1 = text;
+			options->arg2 = fileName;
+			addInstruction("write", options);
+			break;
+
+		case 2:		//read
+			varName = (char*) calloc(500, sizeof(char));
+			fileName = (char*) calloc(500, sizeof(char));
+
+			do
+			{
+				printf("[varName] (where will be stored the content) : ");
+				fgets(varName, 500, stdin);
+			} while(*text == '\n');
+
+			do
+			{
+				printf("[source] (ex: stdin, stdout, stderr, or a filename) : ");
+				fgets(fileName, 500, stdin);
+			} while(*fileName == '\n');
+
+			options->arg1 = text;
+			options->arg2 = fileName;
+			addInstruction("read", options);
+			break;
+
+		case 3:		//exec
+		
+			break;
+
+		case 4:		//exit
+			//Options *options = (Options*) malloc(sizeof(Option));
+			//options->integer = returnValue;
+			break;
+	}
+
+	canCatch = 1;
 }
 
-void generateAssemblyRead()
+Instruction* addInstruction(char *instructionName, Options *options)
 {
-	createAssembly();
-	printf("ASM : read\n");
+	printf("Add instruction %s...\n", instructionName);
+	Instruction *instruction = (Instruction*) malloc(sizeof(Instruction));
+	
+	if(firstInstruction == NULL)
+		firstInstruction = instruction;
+
+	instruction->instructionName = instructionName;
+	instruction->next = NULL;
+
+	if(lastInstruction != NULL)
+		lastInstruction->next = instruction;
+
+	lastInstruction = instruction;
+	return instruction;
 }
 
-void generateAssemblyExec()
+void freeInstructions()
 {
-	createAssembly();
-	printf("ASM : exec\n");
-}
+	Instruction *instruction = firstInstruction;
 
-void generateAssemblyExit()
-{
-	createAssembly();
-	printf("ASM : exit\n");
+	while(instruction != NULL)
+	{
+		free(instruction->instructionName);
+		instruction->instructionName = NULL;
+
+		if(instruction->options->arg1 != NULL)
+		{
+			free(instruction->options->arg1);
+			instruction->options->arg1 = NULL;		
+		}
+
+		if(instruction->options->arg2 != NULL)
+		{
+			free(instruction->options->arg2);
+			instruction->options->arg2 = NULL;		
+		}
+
+		free(instruction->options);
+		instruction->options = NULL;
+
+		Instruction *backup = instruction;
+		instruction = instruction->next;
+		free(backup);
+		backup = NULL;
+	}
 }

@@ -4,8 +4,6 @@ int main(int argc, char **argv)
 {
 	init();
 
-	int userInput;
-
 	while(1)
 	{
 		printf("choice> ");
@@ -25,13 +23,44 @@ int main(int argc, char **argv)
 
 void init()
 {
-	//cleanFiles(); //TODO : remove all asm files
+	cleanFiles();
 	signal(SIGINT, catchCtrl);
+
 	itemCount = 0;
+	canCatch = 1;
+	firstInstruction = NULL;
+	lastInstruction = NULL;
+
 	mainMenu();
 }
 
 void catchCtrl(int dummy)
 {
-	write(STDOUT_FILENO, "\nchoice> ", 9); //KeyBoardInterrupt
+	if(canCatch)
+	{
+		mainMenu();
+		write(STDOUT_FILENO, "CTRL+C: Go to the main menu.\nchoice> ", 37); //KeyBoardInterrupt
+	}
+
+	else
+		write(STDOUT_FILENO, "\b\b  \b\b", 6); //Delete ^C
+}
+
+void cleanFiles()
+{
+	DIR *d = opendir(".");
+	struct dirent *dir;
+
+	while ((dir = readdir(d)) != NULL)
+	{
+		char *asmFile = strcasestr(dir->d_name, ".asm"); //search asm extenssion to delete it
+		
+		if(asmFile != NULL)
+		{		
+			if(strlen(asmFile) == 4)//We test if the length string (pointer) returned by strcasestr is 4 (because strlen(".asm") == 4 )
+				remove(dir->d_name);
+		}
+	}
+
+	closedir(d);
 }

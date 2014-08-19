@@ -1,11 +1,12 @@
 #ifndef MENU_H
 #define MENU_H
 
-#define MAX_ITEM_MENU 6
+#define MAX_ITEM_MENU 8
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "core.h"
 #include "user.h"
@@ -16,8 +17,8 @@ typedef struct ItemMenu
 	void (*func)();
 } ItemMenu;
 
-void *lastMenu;
-void *currentMenu;
+void *lastMenu; //Used to "Back" to another menu
+void *currentMenu; //Used for the "Help", for know what help needs to be print
 ItemMenu *menu[MAX_ITEM_MENU];
 int itemCount;
 
